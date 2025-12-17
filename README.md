@@ -17,7 +17,7 @@ Where:
 ## 2. Mathematical Derivation
 
 ### Boundary and Initial Conditions
-To solve the PDE, we apply the following physical constraints:
+To solve the PDE, I applied the following physical constraints:
 1.  **Source ($x=0$):** Constant concentration maintained by the patch.
     $$ c(0, t) = c_0 $$
 2.  **Sink ($x=L$):** The drug is rapidly cleared by blood flow upon reaching the other side, maintaining zero concentration.
@@ -26,21 +26,21 @@ To solve the PDE, we apply the following physical constraints:
     $$ c(x, 0) = 0 $$
 
 ### Analytical Approach
-Because the boundary conditions are non-homogeneous ($c_0 \neq 0$), we decompose the solution into a steady-state component $c_\infty(x)$ and a transient component $c_T(x,t)$:
+Because the boundary conditions are non-homogeneous ($c_0 \neq 0$), I decomposed the solution into a steady-state component $c_\infty(x)$ and a transient component $c_T(x,t)$:
 $$ c(x,t) = c_\infty(x) + c_T(x,t) $$
 
-1.  **Steady State:** Setting $\frac{\partial c}{\partial t} = 0$, we solve $0 = D c'' - k c$. The solution satisfying BCs is:
+1.  **Steady State:** Setting $\frac{\partial c}{\partial t} = 0$, I solved $0 = D c'' - k c$. The solution satisfying BCs is:
     $$ c_\infty(x) = c_0 \frac{\sinh(\sqrt{k/D}(L-x))}{\sinh(\sqrt{k/D}L)} $$
-2.  **Transient State:** We solve for the deviation from steady state using Separation of Variables and Fourier Series.
+2.  **Transient State:** I solved for the deviation from steady state using Separation of Variables and Fourier Series.
 
 ---
 
 ## 3. Numerical Method: Explicit Euler (FTCS)
 
-To approximate the solution numerically, we use the **Finite Difference Method** with a Forward-Time Central-Space (FTCS) scheme.
+To approximate the solution numerically, I used the **Finite Difference Method** with a Forward-Time Central-Space (FTCS) scheme.
 
 ### Discretization
-We define a grid with spatial step $\Delta x$ and time step $\Delta t$, where $c_i^n$ represents the concentration at node $i$ and time step $n$.
+I defined a grid with spatial step $\Delta x$ and time step $\Delta t$, where $c_i^n$ represents the concentration at node $i$ and time step $n$.
 
 1.  **Time Derivative (Forward Difference):**
     $$ \frac{\partial c}{\partial t} \approx \frac{c_i^{n+1} - c_i^n}{\Delta t} $$
@@ -71,7 +71,7 @@ $$ \Delta t \le \frac{\Delta x^2}{2D} $$
 ## 4. Parameter Justification
 
 ### Physical Parameters
-We selected parameters representative of small drug molecules diffusing through biological tissue.
+I selected parameters representative of small drug molecules diffusing through biological tissue.
 
 | Parameter | Value | Justification |
 | :--- | :--- | :--- |
@@ -84,12 +84,12 @@ We selected parameters representative of small drug molecules diffusing through 
 To ensure accuracy and stability with the FTCS scheme:
 
 1.  **Spatial Grid ($N_x$):**
-    *   We chose $N_x = 50$, giving $\Delta x = 0.1 \text{ mm}$. This provides sufficient resolution to capture the concentration gradient.
+    *   I chose $N_x = 50$, giving $\Delta x = 0.1 \text{ mm}$. This provides sufficient resolution to capture the concentration gradient.
 2.  **Time Step ($N_t$):**
     *   **Stability Check:**
         $$ \Delta t_{max} = \frac{(10^{-4})^2}{2 \cdot 10^{-10}} = \frac{10^{-8}}{2 \cdot 10^{-10}} = 50 \text{ seconds} $$
-    *   We simulate for $T_{final} = 7200$ seconds (2 hours).
-    *   We chose $N_t = 1000$, resulting in $\Delta t = 7.2 \text{ s}$.
+    *   I simulated for $T_{final} = 7200$ seconds (2 hours).
+    *   I chose $N_t = 1000$, resulting in $\Delta t = 7.2 \text{ s}$.
     *   Since $7.2 \text{ s} < 50 \text{ s}$, our simulation is **stable**.
 
 ---
@@ -135,4 +135,5 @@ def solve_drug_delivery_ftcs(L, D, k, c0, T_final, Nx, Nt):
         c[:] = c_new[:]
         
     return x, c
+
 ```
